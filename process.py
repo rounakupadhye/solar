@@ -2,7 +2,7 @@ import wmi
 import sys
 import platform
 # To Save inside file
-file_path = 'logs'
+file_path = 'log'
 sys.stdout = open(file_path, "w")
 my_system = platform.uname()
 
