@@ -1,33 +1,26 @@
-import platform
-import psutil
+import wmi
 import sys
-
-print("Processors: ")
-with open("/proc/cpuinfo", "r")  as f:
-    info = f.readlines()
-
-cpuinfo = [x.strip().split(":")[1] for x in info if "model name"  in x]
-for index, item in enumerate(cpuinfo):
-    print("    " + str(index) + ": " + item)
-
-# Memory
-print("Memory Info: ")
-with open("/proc/meminfo", "r") as f:
-    lines = f.readlines()
-
-print("     " + lines[0].strip())
-print("     " + lines[1].strip())
-
+import platform
 # To Save inside file
-file_path = 'log.txt'
+file_path = 'logs'
 sys.stdout = open(file_path, "w")
-print("Architecture: " + platform.architecture()[0],"Machine: " + platform.machine(),"Node: " + platform.node(),"System: " + platform.system())
-print("Memory Info: ")
-print("     " + lines[0].strip())
-print("     " + lines[1].strip())
-print("Processors: ")
-print("    " + str(index) + ": " + item)
-print("list Of Process Names :")
-for proc in psutil.process_iter(['pid', 'name', 'username']):
-     print(proc.info)
+my_system = platform.uname()
 
+print(f"System: {my_system.system}")
+print(f"Node Name: {my_system.node}")
+print(f"Release: {my_system.release}")
+print(f"Version: {my_system.version}")
+print(f"Machine: {my_system.machine}")
+print(f"Processor: {my_system.processor}")
+
+# Initializing the wmi constructor
+f = wmi.WMI()
+
+# Printing the header for the later columns
+print("pid Process name")
+
+# Iterating through all the running processes
+for process in f.Win32_Process():
+
+    # Displaying the P_ID and P_Name of the process
+    print(f"{process.ProcessId:<10} {process.Name}")
